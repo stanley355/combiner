@@ -1,7 +1,10 @@
-mod args;
-use args::Args;
+mod slice;
+use slice::first_word;
 
 fn main() {
-    let args = Args::new();
-    println!("{:?}", args);
+    let mut s = String::from("Hello world");
+
+    let word = first_word(&s);
+    
+    println!("{:?}", word);
 }
