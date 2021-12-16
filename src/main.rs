@@ -1,20 +1,11 @@
-mod meth;
-use meth::{Rectangle };
+mod matches;
+use matches::plus_one;
 
 fn main() {
-    let rect1 = Rectangle {
-        width: 30,
-        height: 50,
-    };
-    let rect2 = Rectangle {
-        width: 10,
-        height: 40,
-    };
-    let rect3 = Rectangle {
-        width: 60,
-        height: 45,
-    };
+    let five = Some(5);
+    let six = plus_one(five);
+    let none = plus_one(None);
 
-    println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
-    println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
+    println!("Can rect1 hold rect2? {:?}", six);
+    println!("Can rect1 hold rect3? {:?}", none);
 }
