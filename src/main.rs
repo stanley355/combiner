@@ -1,6 +1,7 @@
-mod vect;
-use vect::vect;
+mod maphash;
+use maphash::{maphashing, mapping};
 
 fn main() {
-    vect();
+    maphashing();
+    mapping();
 }
