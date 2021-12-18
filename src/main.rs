@@ -1,8 +1,9 @@
 mod collection;
-use collection::find_mean;
+use collection::{find_mean, find_median};
 
 fn main() {
-    let arr =vec![4, 5, 3, 7, 5, 9]; 
+    let arr =vec![6, 3, 7, 5, 9, 8]; 
 
-    find_mean(arr);
+    find_mean(arr.clone());
+    find_median(arr.clone());
 }
