@@ -1,7 +1,8 @@
-mod maphash;
-use maphash::{maphashing, mapping};
+mod collection;
+use collection::find_mean;
 
 fn main() {
-    maphashing();
-    mapping();
+    let arr =vec![4, 5, 3, 7, 5, 9]; 
+
+    find_mean(arr);
 }
