@@ -17,7 +17,7 @@ pub fn find_median(arr: Vec<usize>) {
   let mut bar = arr.clone();
   bar.sort();
 
-  let med:usize;
+  let med: usize;
   let mid = (bar.len() / 2) - 1;
 
   if bar.len() % 2 == 1 {
@@ -35,11 +35,22 @@ pub fn find_mode(arr: Vec<usize>) {
   let mut map = HashMap::new();
 
   for word in bar {
-      let count = map.entry(word).or_insert(0);
-      *count += 1;
+    let count = map.entry(word).or_insert(0);
+    *count += 1;
   }
 
   let result = map.iter().max_by(|a, b| a.cmp(b)).map(|(k, _v)| k).unwrap();
 
   println!("The mode is : {:?}", result);
+}
+
+pub fn to_pig(text: &str) {
+  let mut to_arr: Vec<_> = text.trim().split("").filter(|x| x != &"").collect();
+  let fw = to_arr.remove(0);
+
+  to_arr.push("-");
+  to_arr.push(fw);
+  to_arr.push("ay");
+
+  println!("{:?}", to_arr.join(""));
 }
