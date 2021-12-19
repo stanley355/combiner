@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 // mean, sorted median, and modues
 pub fn find_mean(arr: Vec<usize>) {
   let lent = arr.len();
@@ -26,4 +28,18 @@ pub fn find_median(arr: Vec<usize>) {
 
   println!("The sorted array is: {:?}", bar);
   println!("The sorted median is: {:?}", med);
+}
+
+pub fn find_mode(arr: Vec<usize>) {
+  let bar = arr.clone();
+  let mut map = HashMap::new();
+
+  for word in bar {
+      let count = map.entry(word).or_insert(0);
+      *count += 1;
+  }
+
+  let result = map.iter().max_by(|a, b| a.cmp(b)).map(|(k, _v)| k).unwrap();
+
+  println!("The mode is : {:?}", result);
 }
