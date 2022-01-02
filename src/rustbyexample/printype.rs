@@ -9,9 +9,9 @@ pub fn printype() {
   );
 
   #[derive(Debug)]
-    struct Structure(i32);
-    println!("This struct {:?} won't print...", Structure(3));
+  struct Structure(i32);
+  println!("This struct {:?} won't print...", Structure(3));
 
-    let pi = 3.141592;
-    println!("Pi is roughly {:.2}", pi); //print 3.14
+  let pi = 3.141592;
+  println!("Pi is roughly {:.2}", pi); //print 3.14
 }
