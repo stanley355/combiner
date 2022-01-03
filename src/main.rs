@@ -1,18 +1,34 @@
-use std::mem;
+#[derive(Debug)]
+struct Point {
+    x: f32,
+    y: f32,
+}
 
-fn analyze_slice(slice: &[i32]) {
-    println!("first element of the slice: {}", slice[0]);
-    println!("the slice has {} elements", slice.len());
+// Structs can be reused as fields of another struct
+#[allow(dead_code)]
+struct Rectangle {
+    // A rectangle can be specified by where the top left and bottom right
+    // corners are in space.
+    top_left: Point,
+    bottom_right: Point,
+}
+
+impl Rectangle {
+    fn rect_area(&self) {
+        let area = self.top_left.x * self.bottom_right.y;
+    }
 }
 
 fn main() {
-    // Fixed-size array (type signature is superfluous)
-    let xs: [i32; 500] = [1; 500];
+    let point: Point = Point { x: 2.3, y: 0.4 };
 
-    // All elements can be initialized to the same value
-    let ys: [i32; 500] = [0; 500];
+    let bot = Point { x: 4.5, ..point };
 
-    println!("array occupies {:?} bytes", analyze_slice(&xs));
+    let _rectangle = Rectangle {
+        // struct instantiation is an expression too
+        top_left: Point { ..point },
+        bottom_right: bot,
+    };
 
-    analyze_slice(&ys[1 .. 4]);
+    println!("second point: ({:?})", _rectangle.rect_area());
 }
