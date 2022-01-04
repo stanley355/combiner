@@ -1,7 +1,7 @@
 #[derive(Debug)]
 struct Point {
-    x: f32,
-    y: f32,
+    x: usize,
+    y: usize,
 }
 
 // Structs can be reused as fields of another struct
@@ -16,13 +16,14 @@ struct Rectangle {
 impl Rectangle {
     fn rect_area(&self) {
         let area = self.top_left.x * self.bottom_right.y;
+        println!("The size of area is {}", area);
     }
 }
 
 fn main() {
-    let point: Point = Point { x: 2.3, y: 0.4 };
+    let point: Point = Point { x: 2, y: 4 };
 
-    let bot = Point { x: 4.5, ..point };
+    let bot = Point { x: 5, ..point };
 
     let _rectangle = Rectangle {
         // struct instantiation is an expression too
@@ -30,5 +31,5 @@ fn main() {
         bottom_right: bot,
     };
 
-    println!("second point: ({:?})", _rectangle.rect_area());
+    _rectangle.rect_area();
 }
