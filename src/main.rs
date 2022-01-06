@@ -1,20 +1,55 @@
-enum VeryVerboseEnumOfThingsToDoWithNumbers {
-    Add,
-    Subtract,
+use std::mem;
+
+#[allow(dead_code)]
+#[derive(Debug, Clone, Copy)]
+struct Point {
+    x: f64,
+    y: f64,
 }
 
-impl VeryVerboseEnumOfThingsToDoWithNumbers {
-    fn run(&self, x: usize, y: usize) -> usize {
-        match self {
-            Self::Add => x + y,
-            Self::Subtract => x - y,
-        }
-    }
+// A Rectangle can be specified by where its top left and bottom right
+// corners are in space
+#[allow(dead_code)]
+struct Rectangle {
+    top_left: Point,
+    bottom_right: Point,
+}
+
+fn origin() -> Point {
+    Point { x: 0.0, y: 0.0 }
+}
+
+fn boxed_origin() -> Box<Point> {
+    // Allocate this point on the heap, and return a pointer to it
+    Box::new(Point { x: 0.0, y: 0.0 })
 }
 
 fn main() {
-    type Operations = VeryVerboseEnumOfThingsToDoWithNumbers;
-    let c = Operations::Add;
-    let d = c.run(3, 2);
-    println!("{}", d);
+    // (all the type annotations are superfluous)
+    // Stack allocated variables
+    let point: Point = Point { x: 0.1, y: 0.1 };
+    let rectangle: Rectangle = Rectangle {
+        top_left: origin(),
+        bottom_right: Point { x: 3.0, y: -4.0 },
+    };
+
+    // Heap allocated rectangle
+    let boxed_rectangle: Box<Rectangle> = Box::new(Rectangle {
+        top_left: origin(),
+        bottom_right: Point { x: 3.0, y: -4.0 },
+    });
+
+    // The output of functions can be boxed
+    let boxed_point: Box<Point> = Box::new(origin());
+
+    // Double indirection
+    let box_in_a_box: Box<Box<Point>> = Box::new(boxed_origin());
+
+    println!("Boxed box occupies {} bytes on the stack",
+             mem::size_of_val(&box_in_a_box));
+
+    // Copy the data contained in `boxed_point` into `unboxed_point`
+    let unboxed_point: Point = *boxed_point;
+    println!("Unboxed point occupies {} bytes on the stack",
+             mem::size_of_val(&unboxed_point));
 }
