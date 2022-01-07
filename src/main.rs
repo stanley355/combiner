@@ -1,55 +1,69 @@
-use std::mem;
+use crate::List::*;
 
-#[allow(dead_code)]
-#[derive(Debug, Clone, Copy)]
-struct Point {
-    x: f64,
-    y: f64,
+enum List {
+    // Cons: Tuple struct that wraps an element and a pointer to the next node
+    Cons(u32, Box<List>),
+    // Nil: A node that signifies the end of the linked list
+    Nil,
 }
 
-// A Rectangle can be specified by where its top left and bottom right
-// corners are in space
-#[allow(dead_code)]
-struct Rectangle {
-    top_left: Point,
-    bottom_right: Point,
-}
+// Methods can be attached to an enum
+impl List {
+    // Create an empty list
+    fn new() -> List {
+        // `Nil` has type `List`
+        Nil
+    }
 
-fn origin() -> Point {
-    Point { x: 0.0, y: 0.0 }
-}
+    // Consume a list, and return the same list with a new element at its front
+    fn prepend(self, elem: u32) -> List {
+        // `Cons` also has type List
+        Cons(elem, Box::new(self))
+    }
 
-fn boxed_origin() -> Box<Point> {
-    // Allocate this point on the heap, and return a pointer to it
-    Box::new(Point { x: 0.0, y: 0.0 })
+    // Return the length of the list
+    fn len(&self) -> u32 {
+        // `self` has to be matched, because the behavior of this method
+        // depends on the variant of `self`
+        // `self` has type `&List`, and `*self` has type `List`, matching on a
+        // concrete type `T` is preferred over a match on a reference `&T`
+        // after Rust 2018 you can use self here and tail (with no ref) below as well,
+        // rust will infer &s and ref tail. 
+        // See https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/default-match-bindings.html
+        match *self {
+            // Can't take ownership of the tail, because `self` is borrowed;
+            // instead take a reference to the tail
+            Cons(_, ref tail) => 1 + tail.len(),
+            // Base Case: An empty list has zero length
+            Nil => 0
+        }
+    }
+
+    // Return representation of the list as a (heap allocated) string
+    fn stringify(&self) -> String {
+        match *self {
+            Cons(head, ref tail) => {
+                // `format!` is similar to `print!`, but returns a heap
+                // allocated string instead of printing to the console
+                format!("{}, {}", head, tail.stringify())
+            },
+            Nil => {
+                format!("Nil")
+            },
+        }
+    }
 }
 
 fn main() {
-    // (all the type annotations are superfluous)
-    // Stack allocated variables
-    let point: Point = Point { x: 0.1, y: 0.1 };
-    let rectangle: Rectangle = Rectangle {
-        top_left: origin(),
-        bottom_right: Point { x: 3.0, y: -4.0 },
-    };
+    // Create an empty linked list
+    let mut list = List::new();
 
-    // Heap allocated rectangle
-    let boxed_rectangle: Box<Rectangle> = Box::new(Rectangle {
-        top_left: origin(),
-        bottom_right: Point { x: 3.0, y: -4.0 },
-    });
+    // Prepend some elements
+    list = list.prepend(1);
+    list = list.prepend(2);
+    list = list.prepend(3);
 
-    // The output of functions can be boxed
-    let boxed_point: Box<Point> = Box::new(origin());
-
-    // Double indirection
-    let box_in_a_box: Box<Box<Point>> = Box::new(boxed_origin());
-
-    println!("Boxed box occupies {} bytes on the stack",
-             mem::size_of_val(&box_in_a_box));
-
-    // Copy the data contained in `boxed_point` into `unboxed_point`
-    let unboxed_point: Point = *boxed_point;
-    println!("Unboxed point occupies {} bytes on the stack",
-             mem::size_of_val(&unboxed_point));
+    // Show the final state of the list
+    println!("linked list has length: {}", list.len());
+    println!("{}", list.stringify());
 }
