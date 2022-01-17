@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 enum-iterator = "0.7.0"
 int-enum = "0.4.0"
+time = "0.3.5"
